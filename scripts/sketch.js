@@ -18,6 +18,11 @@ function setup() {
 
 function draw() {
 	background(51);
+	push();
+	translate(magnet.x, magnet.y);
+	stroke(0,255,123);
+	ellipse(0,0,20,20);
+	pop();
  for (var i = zombies.length - 1; i >= 0; i--) {
     zombies[i].update();
     zombies[i].display();
