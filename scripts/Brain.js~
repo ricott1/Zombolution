@@ -58,7 +58,12 @@ function Brain(size) {
         };
         mutated_coeffs.push(layerCoeffs);
       };
-  this.coefficients = mutated_coeffs;  
+  this.coefficients = mutated_coeffs;
+    
+    
+    
+    
+    
     
    }
 }

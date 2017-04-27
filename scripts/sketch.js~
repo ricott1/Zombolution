@@ -26,6 +26,7 @@ function draw() {
  for (var i = zombies.length - 1; i >= 0; i--) {
     zombies[i].update();
     zombies[i].display();
+    console.log(zombies[i].isDead());
     
     var a = zombies[i].position.x - magnet.x;
     var b = zombies[i].position.y - magnet.y;

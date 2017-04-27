@@ -1,26 +1,36 @@
+var HEALTH_LOSS = 0.00025;
+var TOUCH = 20;
+//This variables contains the hidden layers size plus output
+var ZOMBIE_SIZE = [10, 2, 2, 1];
+var MUTATION_RATE = 1.25;
 function Zombie(x, y) {	
   this.acceleration = createVector(0, 0);
   this.velocity = createVector(0, 0.32);
   this.position = createVector(x, y);
   this.r = 5;
-  this.maxspeed = 2;
-  this.maxforce = 0.05;
-
+  this.maxspeed = 0.5;
+  this.maxforce = 0.075;
+  this.touch = TOUCH;
   this.health = 1;
-  this.brain = new Brain(zombieSize);
+  this.brain = new Brain(ZOMBIE_SIZE);
   this.update = function() {
-
-    this.health -= 0.0005;
-
-    // Update velocity
+    this.health -= HEALTH_LOSS;
     this.velocity.add(this.acceleration);
-    // Limit speed
     this.velocity.limit(this.maxspeed);
     this.position.add(this.velocity);
-    // Reset accelerationelertion to 0 each cycle
     this.acceleration.mult(0);
-
-    this.seek(magnet);
+    
+    var inputs = []
+    for(var i=0; i<this.brain.size[0]; i++) {
+        inputs.push(0);
+    }
+    inputs[0] = this.position.x - magnet.x;
+    inputs[1] = this.position.y - magnet.y;
+    var angle = TWO_PI * this.brain.propagate(inputs, 0);// + this.velocity.heading();
+    //console.log("Magnet:", inputs[0], inputs[1]);
+    //console.log("Angle:", angle, this.brain.propagate(inputs, 0));
+    var target = createVector(this.position.x * (1 + Math.cos(angle)), this.position.y* (1 + Math.sin(angle)));
+    this.seek(target);
   }
 
   this.applyForce = function(force) {
@@ -46,7 +56,13 @@ function Zombie(x, y) {
   this.isDead = function() {
     return (this.health < 0)
   }
-
+    this.clone = function() {
+        var z = new Zombie(this.position.x, this.position.y);
+        z.brain = this.brain;
+        z.brain.mutate();
+        return z;
+    
+    }
   this.display = function() {
     // Draw a triangle rotated in the direction of velocity
     var angle = this.velocity.heading() + PI / 2;
