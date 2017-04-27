@@ -7,7 +7,7 @@ function Zombie(x, y) {
   this.maxforce = 0.05;
 
   this.health = 1;
-    
+  this.brain = new Brain(zombieSize);
   this.update = function() {
 
     this.health -= 0.0005;

@@ -1,24 +1,29 @@
-function Brain(coefficients = [ [[1,1],[1,1]], [[1],[1]] ], intercepts = [[1,1],[1,1],[1]], learning_rate = 0.25) {
-    for(var i ==0; i<size.length; i++){
-       // intercepts.push();
-    }
-    this.coefficients = coefficients;
-    this.intercepts = intercepts;
-   this.propagate = function(inputs, layer) {
-      var M = transpose(this.coefficients[layer]);
-      var b = this.intercepts[layer];
-      var outputs = [];
-      }
-      for (var i = 0; i < b.length; i++) {
-         var o = output(M[i], inputs, b[i]);
-         outputs.push(o);
-      }
-      if (layer < this.coefficients.length - 1) {
-         outputs = propagate(outputs, layer + 1);
-      }
-      return outputs;
+//This variables contains the hidden layers size plus output
+var zombieSize = [2, 2, 1];
+var humanSize = [4, 4, 5];
 
-   }
+function Brain(size, learning_rate = 0.25) {
+    
+    this.size = size;
+    this.coefficients = [];
+    this.intercepts = initializeIntercepts(this.size, 0.01, 2);
+    console.log(this.intercepts);
+  // this.propagate = function(inputs, layer) {
+   //   var M = transpose(this.coefficients[layer]);
+    //  var b = this.intercepts[layer];
+     // var outputs = [];
+   //   }
+    //  for (var i = 0; i < b.length; i++) {
+     //    var o = output(M[i], inputs, b[i]);
+     //    outputs.push(o);
+    //  }
+    //  if (layer < this.coefficients.length - 1) {
+     //    outputs = propagate(outputs, layer + 1);
+    //  }
+    //  return outputs;
+
+  // }
+
 
    //we calculate the scalar product w.x + c, where w=M[j], x=inputs, c = b[j], j is the j-th neuron of the layer
    this.output = function(w, x, c) {
@@ -28,8 +33,21 @@ function Brain(coefficients = [ [[1,1],[1,1]], [[1],[1]] ], intercepts = [[1,1],
       }
       return relu(out);
    }
+    console.log();
 
-   function transpose(M) {
+function initializeIntercepts(size, mean, variance) {
+  var intercepts = [];
+  for(var i=0; i<size.length; i++) {
+    var temp = [];
+    for(var j=0; j<size[i]; j++){
+      var inter = mean + 2 * (Math.random() - 0.5) * variance;
+      temp.push(inter);
+    };
+    intercepts.push(temp);
+  };
+  return intercepts;
+}
+function transpose(M) {
       var MTranspose = M[0].map(function(col, i) {
          return M.map(function(row) {
             return row[i]
@@ -53,4 +71,3 @@ function Brain(coefficients = [ [[1,1],[1,1]], [[1],[1]] ], intercepts = [[1,1],
    function tanh(x) {
       return Math.tanh(x);
    }
-}
