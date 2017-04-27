@@ -8,21 +8,21 @@ function Brain(size, learning_rate = 0.25) {
     this.coefficients = [];
     this.intercepts = initializeIntercepts(this.size, 0.01, 2);
     console.log(this.intercepts);
-  // this.propagate = function(inputs, layer) {
-   //   var M = transpose(this.coefficients[layer]);
-    //  var b = this.intercepts[layer];
-     // var outputs = [];
-   //   }
-    //  for (var i = 0; i < b.length; i++) {
-     //    var o = output(M[i], inputs, b[i]);
-     //    outputs.push(o);
-    //  }
-    //  if (layer < this.coefficients.length - 1) {
-     //    outputs = propagate(outputs, layer + 1);
-    //  }
-    //  return outputs;
+  this.propagate = function(inputs, layer) {
+    var M = transpose(this.coefficients[layer]);
+      var b = this.intercepts[layer];
+      var outputs = [];
+     
+      for (var i = 0; i < b.length; i++) {
+         var o = output(M[i], inputs, b[i]);
+        outputs.push(o);
+      }
+      if (layer < this.coefficients.length - 1) {
+         outputs = propagate(outputs, layer + 1);
+      }
+      return outputs;
 
-  // }
+   }
 
 
    //we calculate the scalar product w.x + c, where w=M[j], x=inputs, c = b[j], j is the j-th neuron of the layer
@@ -33,7 +33,7 @@ function Brain(size, learning_rate = 0.25) {
       }
       return relu(out);
    }
-    console.log();
+}
 
 function initializeIntercepts(size, mean, variance) {
   var intercepts = [];
